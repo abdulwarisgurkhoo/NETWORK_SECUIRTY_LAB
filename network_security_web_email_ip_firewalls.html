@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web, Email, IP Security &amp; Firewalls — Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --bg2: #141414;
+    --bg3: #1a1a1a;
+    --bg4: #222;
+    --border: #2a2a2a;
+    --border2: #333;
+    --text: #e8e8e8;
+    --text2: #a8a8a8;
+    --text3: #6a6a6a;
+    --mint: #00e5a0;
+    --mint-dim: rgba(0,229,160,0.12);
+    --mint-glow: rgba(0,229,160,0.25);
+    --orange: #ff6b35;
+    --orange-dim: rgba(255,107,53,0.12);
+    --orange-glow: rgba(255,107,53,0.25);
+    --cyan: #4fc3f7;
+    --cyan-dim: rgba(79,195,247,0.12);
+    --cyan-glow: rgba(79,195,247,0.25);
+    --gold: #ffd54f;
+    --gold-dim: rgba(255,213,79,0.12);
+    --sidebar-w: 260px;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+    --serif: 'IBM Plex Serif', serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #sidebar::-webkit-scrollbar { width: 4px; }
+  #sidebar::-webkit-scrollbar-track { background: transparent; }
+  #sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .sidebar-logo {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-logo .logo-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--mint);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .sidebar-logo .logo-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .nav-section {
+    padding: 16px 0 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-section:last-child { border-bottom: none; }
+
+  .nav-module-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 0 20px 8px;
+    display: block;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 20px;
+    text-decoration: none;
+    color: var(--text2);
+    font-size: 13px;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .nav-link:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.03);
+    border-left-color: var(--mint);
+  }
+
+  .nav-link.active {
+    color: var(--mint);
+    border-left-color: var(--mint);
+    background: var(--mint-dim);
+  }
+
+  .nav-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--border2);
+    flex-shrink: 0;
+  }
+
+  .nav-link:hover .nav-dot, .nav-link.active .nav-dot {
+    background: var(--mint);
+  }
+
+  /* ── MAIN CONTENT ── */
+  #main {
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #0d0d0d 0%, #141414 50%, #0d1a14 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 60px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,229,160,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 20%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(79,195,247,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--mint);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 30px; height: 1px;
+    background: var(--mint);
+  }
+
+  .hero h1 {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+
+  .hero h1 span { color: var(--mint); }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text2);
+    max-width: 580px;
+    margin-bottom: 48px;
+    font-weight: 300;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 700px;
+  }
+
+  .stat {
+    background: var(--bg2);
+    padding: 20px 24px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--mint);
+    display: block;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ── CONTENT AREA ── */
+  .content {
+    padding: 0 60px 100px;
+    max-width: 960px;
+  }
+
+  /* ── MODULE SECTIONS ── */
+  .module {
+    padding-top: 70px;
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+  }
+
+  .module:first-of-type { border-top: none; margin-top: 0; padding-top: 60px; }
+
+  .module-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .module-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--mint);
+    background: var(--mint-dim);
+    border: 1px solid rgba(0,229,160,0.3);
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+
+  .module-title {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+
+  /* ── HEADINGS ── */
+  h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 48px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 32px 0 12px;
+    color: var(--cyan);
+  }
+
+  h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 20px 0 8px;
+    color: var(--gold);
+    font-family: var(--mono);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  p { margin-bottom: 16px; color: var(--text2); line-height: 1.8; }
+
+  strong { color: var(--text); font-weight: 600; }
+
+  em { color: var(--gold); font-style: italic; }
+
+  /* ── HIGHLIGHT BOXES ── */
+  .highlight, .warn, .info, .gold {
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 24px 0;
+    border-left: 3px solid;
+    position: relative;
+  }
+
+  .highlight {
+    background: var(--mint-dim);
+    border-color: var(--mint);
+  }
+
+  .warn {
+    background: var(--orange-dim);
+    border-color: var(--orange);
+  }
+
+  .info {
+    background: var(--cyan-dim);
+    border-color: var(--cyan);
+  }
+
+  .gold {
+    background: var(--gold-dim);
+    border-color: var(--gold);
+  }
+
+  .box-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .highlight .box-label { color: var(--mint); }
+  .warn .box-label { color: var(--orange); }
+  .info .box-label { color: var(--cyan); }
+  .gold .box-label { color: var(--gold); }
+
+  .highlight p, .warn p, .info p, .gold p {
+    color: var(--text);
+    margin-bottom: 0;
+  }
+
+  .highlight p + p, .warn p + p, .info p + p { margin-top: 8px; }
+
+  /* ── FORMULA / MONO ── */
+  .formula {
+    font-family: var(--mono);
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: var(--cyan);
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  code {
+    font-family: var(--mono);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 13px;
+    color: var(--mint);
+  }
+
+  /* ── TABLES ── */
+  .table-wrap { overflow-x: auto; margin: 24px 0; border-radius: 8px; border: 1px solid var(--border); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  thead tr {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border2);
+  }
+
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--mint);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+  td strong { color: var(--text); }
+
+  td code { font-size: 12px; }
+
+  /* ── LISTS ── */
+  ul, ol {
+    padding-left: 0;
+    margin: 12px 0 20px;
+    list-style: none;
+  }
+
+  li {
+    padding: 5px 0 5px 22px;
+    position: relative;
+    color: var(--text2);
+    line-height: 1.7;
+  }
+
+  ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--mint);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  ol { counter-reset: ol-counter; }
+  ol li::before {
+    content: counter(ol-counter, decimal-leading-zero);
+    counter-increment: ol-counter;
+    position: absolute;
+    left: 0;
+    color: var(--mint);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  li strong { color: var(--text); }
+
+  /* ── SVG CONTAINERS ── */
+  .svg-block {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin: 32px 0;
+    overflow: hidden;
+  }
+
+  .svg-caption {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .svg-caption::before {
+    content: 'FIG';
+    color: var(--mint);
+    font-weight: 600;
+    font-size: 9px;
+    background: var(--mint-dim);
+    padding: 2px 6px;
+    border-radius: 2px;
+    letter-spacing: 1.5px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+    margin: 40px 0;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style><body><nav id="sidebar"><div class="sidebar-logo"><span class="logo-tag">Network Security · BTCS 716</span><span class="logo-title">Web, Email, IP Security<br>&amp; Firewalls</span></div><div class="nav-section"><span class="nav-module-label">Module 01</span><a href="#m1" class="nav-link"><span class="nav-dot"></span>Web Security &amp; SSL</a><a href="#m1-ssl" class="nav-link"><span class="nav-dot"></span>SSL Architecture</a><a href="#m1-record" class="nav-link"><span class="nav-dot"></span>Record Protocol</a><a href="#m1-hs" class="nav-link"><span class="nav-dot"></span>Handshake</a></div><div class="nav-section"><span class="nav-module-label">Module 02</span><a href="#m2" class="nav-link"><span class="nav-dot"></span>TLS &amp; HTTPS</a><a href="#m2-tls" class="nav-link"><span class="nav-dot"></span>TLS Differences</a><a href="#m2-https" class="nav-link"><span class="nav-dot"></span>HTTPS</a></div><div class="nav-section"><span class="nav-module-label">Module 03</span><a href="#m3" class="nav-link"><span class="nav-dot"></span>PGP</a><a href="#m3-ops" class="nav-link"><span class="nav-dot"></span>Operation</a><a href="#m3-keys" class="nav-link"><span class="nav-dot"></span>Keys &amp; Rings</a><a href="#m3-trust" class="nav-link"><span class="nav-dot"></span>Trust Model</a></div><div class="nav-section"><span class="nav-module-label">Module 04</span><a href="#m4" class="nav-link"><span class="nav-dot"></span>IPsec Modes</a><a href="#m4-modes" class="nav-link"><span class="nav-dot"></span>Transport vs Tunnel</a><a href="#m4-sa" class="nav-link"><span class="nav-dot"></span>SA &amp; Policy</a><a href="#m4-esp" class="nav-link"><span class="nav-dot"></span>ESP &amp; Anti-Replay</a></div><div class="nav-section"><span class="nav-module-label">Module 05</span><a href="#m5" class="nav-link"><span class="nav-dot"></span>Firewalls</a><a href="#m5-types" class="nav-link"><span class="nav-dot"></span>Firewall Types</a><a href="#m5-basing" class="nav-link"><span class="nav-dot"></span>Basing &amp; DMZ</a></div><div class="nav-section"><span class="nav-module-label">Module 06</span><a href="#m6" class="nav-link"><span class="nav-dot"></span>IDS &amp; IPS</a><a href="#m6-ids" class="nav-link"><span class="nav-dot"></span>IDS</a><a href="#m6-ips" class="nav-link"><span class="nav-dot"></span>IPS</a></div></nav><div id="main"><header class="hero"><div class="hero-eyebrow">Network Security Study Reference</div><h1>Web, Email &amp; <span>IP Security</span><br>Firewalls &amp; IDS</h1><p class="hero-sub">Exam-oriented notes based on Stallings, <em>Cryptography and Network Security</em> (5th ed.), Ch. 16, 18, 19, 20, 22. Abdul Waris · Roll No. 2324CUKMR01 · Dept. of Information Technology, Central University of Kashmir.</p><div class="hero-stats"><div class="stat"><span class="stat-value">06</span><span class="stat-label">Modules</span></div><div class="stat"><span class="stat-value">SSL</span><span class="stat-label">TLS · HTTPS</span></div><div class="stat"><span class="stat-value">PGP</span><span class="stat-label">IPsec</span></div><div class="stat"><span class="stat-value">FW</span><span class="stat-label">IDS · IPS</span></div></div></header><div class="content"><section class="module" id="m1"><div class="module-header"><span class="module-num">MOD — 01</span><h1 class="module-title">Web Security &amp; SSL</h1></div><h2>Web Security Considerations</h2><p>The Web is a client/server application over TCP/IP, but it adds new risks (Stallings §16.1):</p><ul><li><strong>Two-way:</strong> servers are attackable from the Internet.</li><li><strong>Visible outlet:</strong> subverted servers damage reputation and money.</li><li><strong>Complex software:</strong> hides many security flaws.</li><li><strong>Launching pad:</strong> a compromised server exposes the whole internal network.</li><li><strong>Untrained users:</strong> casual clients lack tools and awareness.</li></ul><p><strong>Passive attacks:</strong> eavesdropping, unauthorised access to restricted data. <strong>Active attacks:</strong> impersonation, message alteration in transit, site defacement. Threats lie at the <em>server</em>, <em>browser</em> or <em>network traffic</em>; this chapter addresses traffic security.</p><div class="table-wrap"><table><thead><tr><th>Property</th><th>Threats</th><th>Consequences</th><th>Countermeasure</th></tr></thead><tbody><tr><td><strong>Integrity</strong></td><td>Modifying user data, Trojan browser, modifying messages in transit</td><td>Loss of information, machine compromise</td><td>Cryptographic checksums</td></tr><tr><td><strong>Confidentiality</strong></td><td>Eavesdropping, theft of server/client data, network configuration info</td><td>Loss of information and privacy</td><td>Encryption, Web proxies</td></tr><tr><td><strong>Denial of Service</strong></td><td>Killing threads, flooding with bogus requests, filling disk/memory, DNS attacks</td><td>Disruptive, prevents work</td><td>Difficult to prevent</td></tr><tr><td><strong>Authentication</strong></td><td>Impersonating legitimate users, data forgery</td><td>Misrepresentation, false information believed</td><td>Cryptographic techniques</td></tr></tbody></table></div><h3>Where to place security in the TCP/IP stack</h3><div class="table-wrap"><table><thead><tr><th>Level</th><th>Example</th><th>Pros</th></tr></thead><tbody><tr><td>Network</td><td>IPsec</td><td>Transparent to apps/users; general-purpose; can filter selected traffic</td></tr><tr><td>Transport (above TCP)</td><td>SSL / TLS</td><td>General-purpose; built into browsers/servers or the protocol suite</td></tr><tr><td>Application</td><td>S/MIME, Kerberos, PGP</td><td>Tailored to the needs of one application</td></tr></tbody></table></div><h2 id="m1-ssl">SSL Architecture</h2><p>SSL (Netscape, SSLv3) uses TCP for a reliable end-to-end secure service. It is <strong>two layers</strong>: the <strong>Record Protocol</strong> (base layer) carrying three upper protocols — <strong>Handshake</strong>, <strong>Change Cipher Spec</strong>, <strong>Alert</strong> — plus HTTP.</p><div class="highlight"><span class="box-label">Connection vs Session</span><p><strong>Connection:</strong> a transient peer-to-peer transport; every connection belongs to one session. <strong>Session:</strong> an association between client and server created by the Handshake Protocol; defines shared cryptographic parameters reused across connections to avoid costly renegotiation.</p></div><div class="table-wrap"><table><thead><tr><th>Session state</th><th>Connection state</th></tr></thead><tbody><tr><td>Session identifier, peer certificate (X.509v3), compression method, cipher spec, 48-byte master secret, is-resumable flag</td><td>Server/client random, server/client write MAC secret, server/client write key, IVs (CBC), sequence numbers (reset to 0 on change_cipher_spec; max 2<sup>64</sup>−1)</td></tr></tbody></table></div><h2 id="m1-record">SSL Record Protocol</h2><p>Provides <strong>confidentiality</strong> (shared key encryption) and <strong>message integrity</strong> (MAC). Sender steps:</p><ol><li><strong>Fragment</strong> into blocks ≤ 2<sup>14</sup> bytes.</li><li><strong>Compress</strong> (optional, lossless; default null).</li><li><strong>Add MAC</strong> over compressed data.</li><li><strong>Encrypt</strong> compressed data + MAC (block cipher: pad to block multiple + pad-length byte).</li><li><strong>Append header</strong>: Content Type (8), Major Ver (8), Minor Ver (8), Length (16).</li></ol><div class="formula">MAC = hash( MAC_write_secret ‖ pad_2 ‖ hash( MAC_write_secret ‖ pad_1 ‖ seq_num ‖ type ‖ length ‖ fragment ) )<br>pad_1 = 0x36 repeated 48× (MD5) / 40× (SHA-1); pad_2 = 0x5C, same counts</div><div class="info"><span class="box-label">Exam Note</span><p>SSLv3 <em>concatenates</em> the pads; HMAC <em>XORs</em> them. Padding example: 58-byte data + 20-byte SHA-1 MAC + 1 length byte = 79 → add 1 pad byte for 8-byte blocks. Content types: change_cipher_spec, alert, handshake, application_data. Ciphers: AES, IDEA, RC2-40, DES-40, DES, 3DES, Fortezza; RC4-40/128 (stream).</p></div><h3>Change Cipher Spec &amp; Alert Protocols</h3><ul><li><strong>Change Cipher Spec:</strong> one byte (value 1); copies the <em>pending</em> state into the <em>current</em> state.</li><li><strong>Alert:</strong> 2 bytes — level (warning 1 / fatal 2) + code. Fatal: unexpected_message, bad_record_mac, decompression_failure, handshake_failure, illegal_parameter. Others: close_notify, no_certificate, bad/unsupported/revoked/expired/unknown certificate.</li></ul><h2 id="m1-hs">Handshake Protocol (four phases)</h2><p>Message format: Type (1 byte), Length (3), Content. Used before any application data.</p><div class="table-wrap"><table><thead><tr><th>Phase</th><th>Messages</th><th>Purpose</th></tr></thead><tbody><tr><td><strong>1. Security capabilities</strong></td><td>client_hello → server_hello</td><td>Version, Random (32-bit timestamp + 28 random bytes; nonces against replay), Session ID, CipherSuite list, compression. Server picks one suite; version = lower of client/server.</td></tr><tr><td><strong>2. Server auth &amp; key exchange</strong></td><td>certificate, server_key_exchange, certificate_request, server_done</td><td>Server certificate chain (not needed for anonymous DH); key exchange params signed over hash(ClientHello.random ‖ ServerHello.random ‖ params).</td></tr><tr><td><strong>3. Client auth &amp; key exchange</strong></td><td>certificate, client_key_exchange, certificate_verify</td><td>RSA: client sends 48-byte pre-master secret encrypted with server public key. DH: client public value. certificate_verify proves private-key ownership.</td></tr><tr><td><strong>4. Finish</strong></td><td>change_cipher_spec, finished (both sides)</td><td>Switch to new CipherSpec; finished = hash over master secret and all handshake messages, verifying key exchange/authentication.</td></tr></tbody></table></div><h3>Key exchange methods</h3><ul><li><strong>RSA:</strong> secret encrypted with receiver’s RSA public key.</li><li><strong>Fixed DH:</strong> DH parameters in CA-signed certificate; fixed secret between peers.</li><li><strong>Ephemeral DH:</strong> signed one-time DH keys; most secure (temporary, authenticated).</li><li><strong>Anonymous DH:</strong> no authentication; vulnerable to man-in-the-middle.</li><li><strong>Fortezza:</strong> Fortezza scheme.</li></ul><div class="formula">master_secret = MD5(pms ‖ SHA('A' ‖ pms ‖ ClientRandom ‖ ServerRandom)) ‖ MD5(pms ‖ SHA('BB' ‖ …)) ‖ MD5(pms ‖ SHA('CCC' ‖ …))   → 48 bytes<br>key_block generated the same way from master_secret → client MAC secret, server MAC secret, client key, server key, client IV, server IV</div></section><section class="module" id="m2"><div class="module-header"><span class="module-num">MOD — 02</span><h1 class="module-title">TLS &amp; HTTPS</h1></div><h2 id="m2-tls">Transport Layer Security (RFC 5246)</h2><p>IETF standard version of SSL; essentially SSLv3.1 and very close to SSLv3. Same record format.</p><div class="table-wrap"><table><thead><tr><th>Aspect</th><th>SSLv3</th><th>TLS</th></tr></thead><tbody><tr><td>Version</td><td>3.0</td><td>Major 3, minor 3</td></tr><tr><td>MAC</td><td>Pads concatenated</td><td><strong>HMAC</strong> (RFC 2104): H[(K⁺⊕opad) ‖ H[(K⁺⊕ipad) ‖ M]]; also covers the <em>version</em> field</td></tr><tr><td>Key expansion</td><td>MD5/SHA ad-hoc construction</td><td><strong>PRF</strong> built on P_hash with HMAC; uses MD5 and SHA-1 so it stays secure if either survives</td></tr><tr><td>Alerts</td><td>Includes no_certificate</td><td>Drops no_certificate; adds record_overflow, unknown_ca, access_denied, decode_error, decrypt_error, protocol_version, insufficient_security, user_canceled, no_renegotiation…</td></tr><tr><td>Cipher suites</td><td>Includes Fortezza</td><td>No Fortezza (key exchange or symmetric)</td></tr><tr><td>certificate_verify</td><td>Hash includes master secret and pads</td><td>MD5/SHA-1 over handshake messages only</td></tr><tr><td>finished</td><td>MD5/SHA over master secret + pads</td><td>PRF(master_secret, "client/server finished", MD5(hs) ‖ SHA-1(hs))</td></tr><tr><td>Padding</td><td>Minimum needed</td><td>Any amount up to 255 bytes (frustrates traffic-length analysis)</td></tr></tbody></table></div><div class="formula">P_hash(secret, seed) = HMAC(secret, A(1)‖seed) ‖ HMAC(secret, A(2)‖seed) ‖ …<br>A(0)=seed, A(i)=HMAC(secret, A(i−1)) &nbsp;|&nbsp; PRF(secret, label, seed) = P_hash(S1, label‖seed)<br>master_secret = PRF(pms, "master secret", ClientRandom‖ServerRandom) &nbsp;|&nbsp; key_block = PRF(master_secret, "key expansion", ServerRandom‖ClientRandom)</div><h2 id="m2-https">HTTPS (HTTP over SSL/TLS, RFC 2818)</h2><ul><li>URL begins <code>https://</code>; uses <strong>port 443</strong> (HTTP uses 80).</li><li><strong>Encrypted:</strong> requested URL, document contents, form contents, cookies (both directions), HTTP headers.</li><li><strong>Connection initiation:</strong> HTTP client also acts as TLS client; sends ClientHello, completes handshake, then all HTTP data travels as TLS application data.</li><li><strong>Three levels of awareness:</strong> HTTP connection, TLS session (supports many connections), underlying TCP connection.</li><li><strong>Closure:</strong> each side sends TLS <code>close_notify</code>; HTTP may signal <code>Connection: close</code>. A TCP close without close_notify may indicate attack, so the client should warn.</li></ul><div class="warn"><span class="box-label">Exam Pitfall</span><p>HTTPS is not a new protocol; it is HTTP layered on SSL/TLS. Security rests on certificate validation: anonymous DH offers no authentication and is open to man-in-the-middle.</p></div></section><section class="module" id="m3"><div class="module-header"><span class="module-num">MOD — 03</span><h1 class="module-title">Email Security: PGP</h1></div><h2>Overview</h2><p>PGP (Phil Zimmermann) gives <strong>confidentiality and authentication</strong> for email and file storage using the best available algorithms: RSA/DSS/Diffie-Hellman (ElGamal), CAST-128/IDEA/3DES, SHA-1. It is free, platform-independent and not controlled by any government or standards body.</p><div class="table-wrap"><table><thead><tr><th>Service</th><th>Algorithms</th><th>How</th></tr></thead><tbody><tr><td>Digital signature</td><td>DSS/SHA or RSA/SHA</td><td>SHA-1 hash of message encrypted with sender’s private key</td></tr><tr><td>Message encryption</td><td>CAST-128 / IDEA / 3DES + RSA or DH(ElGamal)</td><td>One-time session key encrypts message; session key encrypted with recipient’s public key</td></tr><tr><td>Compression</td><td>ZIP</td><td>After signing, before encryption</td></tr><tr><td>E-mail compatibility</td><td>Radix-64</td><td>Binary → printable ASCII</td></tr></tbody></table></div><h2 id="m3-ops">Operation</h2><h3>Authentication</h3><ol><li>Sender creates message.</li><li>SHA-1 → 160-bit hash.</li><li>Hash encrypted with sender’s private key (RSA) and prepended.</li><li>Receiver decrypts hash with sender’s public key.</li><li>Receiver recomputes hash and compares; match = authentic.</li></ol><h3>Confidentiality</h3><ol><li>Sender generates message and random 128-bit session key.</li><li>Message encrypted with CAST-128 (64-bit CFB mode).</li><li>Session key encrypted with recipient’s public key, prepended.</li><li>Receiver recovers session key with private key and decrypts.</li></ol><div class="formula">Both services: &nbsp;E( Ks , Z( M ‖ E(PRa, H(M)) ) ) ‖ E(PUb, Ks) &nbsp;→ sign, compress, encrypt, then encrypt key</div><div class="highlight"><span class="box-label">Why symmetric + public key?</span><p>Symmetric ciphers are much faster; the public-key step solves session-key distribution (no handshake possible in store-and-forward email); one-time keys limit exposure per key.</p></div><div class="gold"><span class="box-label">Order matters: sign → compress → encrypt</span><p>Sign before compression so the signature can be verified against stored plaintext and because ZIP is non-deterministic across implementations. Encrypt after compression because compressed text has less redundancy, making cryptanalysis harder.</p></div><h3>Radix-64</h3><p>3 octets → 4 ASCII characters plus a CRC; expands data by 33%, but ZIP (~2:1) gives net ≈ 0.665×, still about one-third smaller.</p><h2 id="m3-keys">Keys, Key IDs &amp; Key Rings</h2><ul><li><strong>Four key types:</strong> one-time session keys, public keys, private keys, passphrase-based symmetric keys.</li><li><strong>Session key generation:</strong> CAST-128 in CFB with keystroke-timing-derived randomness (ANSI X12.17 style).</li><li><strong>Key ID</strong> = least significant 64 bits of public key (PUa mod 2<sup>64</sup>); identifies which key decrypts the session key or verifies a signature.</li></ul><h3>Message format</h3><p><strong>Session key component</strong> (recipient key ID + encrypted Ks), <strong>Signature component</strong> (timestamp, sender key ID, leading two octets of digest, encrypted SHA-1 digest), <strong>Message component</strong> (filename, timestamp, data). Detached signatures are supported (separate logs, executables, multi-party contracts).</p><div class="table-wrap"><table><thead><tr><th>Ring</th><th>Entries</th><th>Notes</th></tr></thead><tbody><tr><td>Private-key ring</td><td>Timestamp, Key ID, public key, <strong>encrypted private key</strong>, User ID</td><td>Private key encrypted with CAST-128 using SHA-1(passphrase) as key; passphrase then discarded</td></tr><tr><td>Public-key ring</td><td>Timestamp, Key ID, public key, OWNERTRUST, User ID, KEYLEGIT, signatures, SIGTRUST</td><td>Others’ public keys; indexed by User ID or Key ID</td></tr></tbody></table></div><h2 id="m3-trust">Public-Key Management &amp; Web of Trust</h2><p>Protecting public keys from tampering is the “Achilles heel” of public-key cryptography: a forged key lets an attacker forge signatures and read messages. Approaches: get key physically; verify the <strong>fingerprint</strong> (SHA-1 digest) by phone; obtain from a trusted introducer; obtain from a certifying authority.</p><ul><li><strong>OWNERTRUST:</strong> user-assigned trust in key owner as a signer (unknown, untrusted, marginal, complete, ultimate).</li><li><strong>SIGTRUST:</strong> cached owner trust of each signer.</li><li><strong>KEYLEGIT:</strong> computed by PGP; complete if one ultimate signature, or weights reach 1 (1/X per always-trusted, 1/Y per usually-trusted signature).</li></ul><div class="info"><span class="box-label">Revocation</span><p>Owner issues a <strong>key revocation certificate</strong> signed with the corresponding private key and disseminates it widely. An attacker with the private key could also revoke, but that harms the attacker too, so it is unlikely.</p></div></section><section class="module" id="m4"><div class="module-header"><span class="module-num">MOD — 04</span><h1 class="module-title">IP Security (IPsec): Modes</h1></div><h2>Overview &amp; Services</h2><p>IPsec encrypts and/or authenticates all traffic at the IP level, for IPv4 and IPv6. Uses: branch-office VPNs, secure remote access, extranet/intranet links with partners, safer e-commerce. Benefits: strong perimeter security in firewall/router, resistant to bypass, below TCP/UDP so transparent to applications and users.</p><ul><li><strong>RFC 4301 services:</strong> access control, connectionless integrity, data-origin authentication, replay rejection, confidentiality, limited traffic-flow confidentiality.</li><li><strong>Protocols:</strong> <strong>AH</strong> (authentication; deprecated, ESP covers it) and <strong>ESP</strong> (encryption + optional authentication). <strong>IKE</strong> handles key management.</li></ul><h2 id="m4-modes">Transport vs Tunnel Mode</h2><div class="table-wrap"><table><thead><tr><th></th><th>Transport mode</th><th>Tunnel mode</th></tr></thead><tbody><tr><td>Protects</td><td>Payload of IP packet (TCP/UDP/ICMP segment)</td><td>Entire original IP packet, as payload of a new outer IP packet</td></tr><tr><td>Typical use</td><td>End-to-end between two hosts</td><td>At least one end is a security gateway (firewall/router): VPNs</td></tr><tr><td>Headers</td><td>Original IP header kept, readable by routers</td><td>New outer header (gateway addresses); inner header hidden</td></tr><tr><td>AH</td><td>Authenticates payload + selected IP header fields</td><td>Authenticates entire inner packet + selected outer header fields</td></tr><tr><td>ESP</td><td>Encrypts payload (and IPv6 ext headers after ESP)</td><td>Encrypts entire inner IP packet</td></tr><tr><td>ESP + auth</td><td>Authenticates payload, <em>not</em> IP header</td><td>Authenticates inner packet (ESP header + ciphertext)</td></tr><tr><td>Hosts need IPsec?</td><td>Yes</td><td>No; gateway does the work</td></tr></tbody></table></div><div class="formula">Transport ESP (IPv4): [Orig IP hdr][ESP hdr][ TCP | Data | ESP trailer ][ESP auth]  ← encrypted: TCP..trailer<br>Tunnel ESP: [New IP hdr][ESP hdr][ Orig IP hdr | TCP | Data | ESP trailer ][ESP auth]  ← encrypted: orig IP..trailer</div><div class="highlight"><span class="box-label">Tunnel example</span><p>Host A sends packet to B; A’s gateway sees policy match, encapsulates it with an outer header (gateway → gateway); routers examine only the outer header; B’s gateway strips it and delivers the inner packet to B.</p></div><h2 id="m4-sa">Security Associations &amp; Policy</h2><p>An <strong>SA</strong> is a one-way relationship; identified by <strong>SPI</strong> (32-bit, local significance), <strong>destination IP address</strong> and <strong>security protocol (AH/ESP)</strong>.</p><ul><li><strong>SAD:</strong> SPI, sequence counter, overflow flag, anti-replay window, AH/ESP info (algorithms, keys, lifetimes), SA lifetime, mode (tunnel/transport/wildcard), path MTU.</li><li><strong>SPD:</strong> selectors (remote/local IP, next-layer protocol, name, ports) map traffic to an SA with action <code>PROTECT</code>, <code>BYPASS</code> or <code>DISCARD</code>.</li><li><strong>Outbound:</strong> match selectors in SPD → find SA/SPI → apply AH/ESP.</li></ul><h2 id="m4-esp">ESP Format &amp; Anti-Replay</h2><ul><li><strong>Fields:</strong> SPI (32), Sequence Number (32), Payload Data (variable, may include IV), Padding (0–255), Pad Length (8), Next Header (8), ICV (optional integrity check).</li><li><strong>Order:</strong> encrypt first, then compute ICV, so bogus/replayed packets are rejected before decryption (reduces DoS impact).</li><li><strong>Anti-replay:</strong> sender counter starts at 0 (first packet = 1) and must not wrap past 2<sup>32</sup>−1. Receiver keeps window W = 64 with right edge N. In-window and new → check MAC, mark. Right of window and valid → advance window. Left of window or authentication fails → discard (auditable).</li></ul><h3>Combining SAs &amp; IKE</h3><ul><li><strong>SA bundle:</strong> transport adjacency (AH + ESP on same packet, one level) or iterated tunneling (multiple nested tunnels).</li><li><strong>IKE:</strong> manual or automated key management; IKEv2 (formerly ISAKMP/Oakley) refines Diffie-Hellman with authentication to defeat man-in-the-middle.</li></ul></section><section class="module" id="m5"><div class="module-header"><span class="module-num">MOD — 05</span><h1 class="module-title">Firewalls</h1></div><h2>Characteristics</h2><p>A firewall sits between the premises network and the Internet as a single <strong>choke point</strong> for security and auditing (defense in depth).</p><h3>Design goals</h3><ol><li>All traffic in and out must pass through the firewall.</li><li>Only authorised traffic per local security policy is allowed.</li><li>The firewall itself is immune to penetration (hardened/trusted system).</li></ol><div class="table-wrap"><table><thead><tr><th>Control</th><th>Meaning</th></tr></thead><tbody><tr><td><strong>Service</strong></td><td>Which Internet services may be accessed (by IP, protocol, port; proxy; or hosted servers)</td></tr><tr><td><strong>Direction</strong></td><td>Direction in which requests may be initiated</td></tr><tr><td><strong>User</strong></td><td>Access depends on which user (needs secure authentication, e.g. IPsec)</td></tr><tr><td><strong>Behavior</strong></td><td>How services are used (spam filtering, partial web access)</td></tr></tbody></table></div><div class="info"><span class="box-label">Capabilities vs Limitations</span><p><strong>Can:</strong> single choke point, block vulnerable services, defend against IP spoofing/routing attacks, monitor/audit events, host NAT and logging, host IPsec VPN.<br><strong>Cannot:</strong> stop attacks that bypass it (dial-out, modems), fully stop insider threats, protect against insecure wireless LANs, stop infected laptops/portable media brought inside.</p></div><h2 id="m5-types">Types of Firewalls</h2><div class="table-wrap"><table><thead><tr><th>Type</th><th>Layer / works by</th><th>Strengths</th><th>Weaknesses</th></tr></thead><tbody><tr><td><strong>Packet filtering</strong></td><td>Rules on source/dest IP, ports, protocol, interface; forward or discard</td><td>Simple, fast, transparent</td><td>No upper-layer awareness; limited logging; no user authentication; vulnerable to spoofing and misconfiguration</td></tr><tr><td><strong>Stateful inspection</strong></td><td>Packet filter + table of established TCP connections (can track sequence numbers, inspect FTP/IM commands)</td><td>Allows only replies to known sessions; avoids opening all high ports</td><td>More processing than stateless filter</td></tr><tr><td><strong>Application-level gateway (proxy)</strong></td><td>Relays app traffic through proxy code; user authenticates to gateway</td><td>Most secure; per-application control and full logging</td><td>Processing overhead (two spliced connections)</td></tr><tr><td><strong>Circuit-level gateway</strong></td><td>Two TCP connections (inner and outer), relays segments without inspecting content (e.g. SOCKS, port 1080)</td><td>Efficient; hides internal hosts</td><td>Does not inspect payload</td></tr></tbody></table></div><h3>Packet-filter policy &amp; attacks</h3><ul><li><strong>Default = discard:</strong> not expressly permitted is prohibited (conservative; preferred by business/government). <strong>Default = forward:</strong> not expressly prohibited is permitted (open organisations).</li><li><strong>IP spoofing:</strong> drop outside-arriving packets with inside source address.</li><li><strong>Source routing:</strong> discard packets using the option.</li><li><strong>Tiny fragment:</strong> enforce minimum transport header in first fragment; discard the rest if rejected.</li></ul><h2 id="m5-basing">Basing &amp; Configurations</h2><ul><li><strong>Bastion host:</strong> hardened critical strong point hosting proxies; minimal services, per-proxy authentication, small independent proxies, full audit logs, read-only code, non-privileged execution.</li><li><strong>Host-based firewall:</strong> software on a server; tailored rules, topology-independent, adds a layer.</li><li><strong>Personal firewall:</strong> protects a PC; denies unauthorised remote access, can monitor outgoing malware.</li><li><strong>DMZ:</strong> region between external and internal firewalls holding public servers (web, mail, DNS). Internal firewalls add stricter filtering and protect both ways.</li><li><strong>VPN:</strong> IPsec in the firewall allows filtering; IPsec in a separate box behind the firewall hides the encrypted traffic from it.</li><li><strong>Distributed firewalls:</strong> stand-alone and host-based firewalls under central administration.</li></ul></section><section class="module" id="m6"><div class="module-header"><span class="module-num">MOD — 06</span><h1 class="module-title">Intrusion Detection &amp; Prevention</h1></div><h2>Intruders</h2><div class="table-wrap"><table><thead><tr><th>Class</th><th>Description</th><th>Likely origin</th></tr></thead><tbody><tr><td><strong>Masquerader</strong></td><td>Unauthorised user exploiting a legitimate account</td><td>Outsider</td></tr><tr><td><strong>Misfeasor</strong></td><td>Legitimate user misusing access or privileges</td><td>Insider</td></tr><tr><td><strong>Clandestine user</strong></td><td>Seizes supervisory control to evade auditing</td><td>Either</td></tr></tbody></table></div><h2 id="m6-ids">Intrusion Detection (IDS)</h2><p>Prevention eventually fails, so detection is the second line of defense: fast detection limits damage, deters intruders and yields data to strengthen prevention. It assumes intruder behaviour differs measurably from legitimate behaviour, but the profiles <em>overlap</em>.</p><div class="warn"><span class="box-label">False positives vs false negatives</span><p>Loose rules catch more intruders but flag legitimate users (false positives); tight rules miss intruders (false negatives). The <strong>base-rate fallacy</strong>: when real intrusions are rare, even an accurate detector produces mostly false alarms, which operators then ignore.</p></div><div class="table-wrap"><table><thead><tr><th>Approach</th><th>Technique</th><th>Best against</th></tr></thead><tbody><tr><td><strong>Statistical anomaly</strong></td><td>Threshold detection (event counts over time); profile-based (per-user metrics: counter, gauge, interval timer, resource use; models: mean/std-dev, multivariate, Markov, time series, operational)</td><td>Masqueraders; needs no knowledge of vulnerabilities</td></tr><tr><td><strong>Rule-based anomaly</strong></td><td>Rules auto-generated from historical usage patterns</td><td>Deviations from past behaviour</td></tr><tr><td><strong>Rule-based penetration identification</strong></td><td>Expert-system rules for known attacks/weaknesses (e.g. IDES, USTAT)</td><td>Known penetrations; misfeasors</td></tr></tbody></table></div><h3>Audit records &amp; distributed IDS</h3><ul><li><strong>Native</strong> audit records (no extra software, may lack detail) vs <strong>detection-specific</strong> (Denning format: Subject, Action, Object, Exception-Condition, Resource-Usage, Time-Stamp).</li><li><strong>Distributed IDS</strong> (UC Davis): host agent modules, LAN monitor agents and a central manager that correlates reports; must protect audit data in transit and handle differing formats.</li><li><strong>Honeypots:</strong> decoy systems that divert attackers, collect activity data and keep them engaged while administrators respond; any access is suspect.</li></ul><h2 id="m6-ips">Intrusion Prevention (IPS)</h2><div class="gold"><span class="box-label">Source note</span><p>Stallings 5th ed. has no dedicated IPS section; this part is standard supplementary material, not textbook text.</p></div><ul><li><strong>IPS</strong> = IDS detection engine placed <em>inline</em>, so it can actively <strong>block</strong>, drop packets, reset connections or reconfigure firewalls, while an IDS only alerts (passive).</li><li><strong>Network-based (NIDS/NIPS)</strong> inspects traffic at a network point; <strong>host-based (HIDS/HIPS)</strong> monitors one host’s logs, files and system calls.</li><li><strong>Detection methods:</strong> signature-based (known attacks, low false positives, misses novel) and anomaly-based (catches novel, more false positives).</li><li>Inline placement makes false positives costly (may block legitimate traffic) and adds latency and a possible point of failure.</li></ul></section><div class="divider"></div><div class="info"><span class="box-label">Prepared by</span><p>Abdul Waris · Roll No. 2324CUKMR01 · Dept. of Information Technology, Central University of Kashmir. Source: William Stallings, Cryptography and Network Security, 5th Edition.</p></div></div></div><script>
+  // Active nav link tracking via IntersectionObserver
+  const sections = document.querySelectorAll('section[id], h2[id], h3[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + id) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Smooth scroll polyfill for anchors
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>

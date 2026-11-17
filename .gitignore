@@ -1,0 +1,25 @@
+# Compiled binaries
+*.exe
+*.out
+*.o
+*.obj
+a.out
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.log
+
+# Keep the textbook PDF tracked (large file — consider Git LFS if >100MB)
+# William Stallings*.pdf
